@@ -2,8 +2,21 @@ from selenium import webdriver
 from datetime import datetime
 from twilio.rest import Client
 from decouple import config
+from playsound import playsound
 import time
 import sched
+
+
+class bcolors:
+    HEADER = "\033[95m"
+    OKBLUE = "\033[94m"
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    ENDC = "\033[0m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
 
 
 # twilio config
@@ -52,10 +65,11 @@ def check_tokens(cached_tokens):
 
     print("Tick at: ", datetime.now())
     if cached_tokens != retrieved_tokens:
-        print("------ Alert! -------- ")
-        print("new tokens: ", retrieved_tokens)
+        print(bcolors.OKGREEN + "------ Alert! -------- " + bcolors.ENDC)
+        print(bcolors.OKGREEN + "new tokens: " + str(retrieved_tokens) + bcolors.ENDC)
         cached_tokens = retrieved_tokens
-        send_sms()
+        # send_sms()
+        playsound("crow-sound.mp3")
 
     scheduler.enter(300, 1, check_tokens, (cached_tokens,))
 
@@ -63,5 +77,5 @@ def check_tokens(cached_tokens):
 cached_tokens = set()
 
 # enter(delay in seconds, task Priority, function to be called, tupleOfParameters to be provided to function)
-scheduler.enter(5, 1, check_tokens, (cached_tokens,))
+scheduler.enter(2, 1, check_tokens, (cached_tokens,))
 scheduler.run()
