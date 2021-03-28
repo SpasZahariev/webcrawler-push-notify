@@ -71,7 +71,7 @@ def check_tokens(cached_tokens):
         # send_sms()
         playsound("crow-sound.mp3")
 
-    scheduler.enter(300, 1, check_tokens, (cached_tokens,))
+    scheduler.enter(60, 1, check_tokens, (cached_tokens,))
 
 
 cached_tokens = set()
